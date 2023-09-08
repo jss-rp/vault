@@ -17,8 +17,5 @@ public class Application {
         frame.setSize(640, 480);
         frame.setLocation(new Point(0, 0));
         frame.setVisible(true);
-
-//        final File file = new File("C:\\Users\\Jonatan\\IdeaProjects\\vault\\src\\main\\resources\\database.kdbx");
-//        KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, "user:secret");
     }
 }

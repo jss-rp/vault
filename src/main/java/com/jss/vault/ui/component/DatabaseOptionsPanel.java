@@ -2,27 +2,25 @@ package com.jss.vault.ui.component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class DatabaseOptionsPanel extends JPanel {
-    private final JButton createButton = new JButton("New ");
-    private final JButton selectButton = new JButton("Open...");
 
     public DatabaseOptionsPanel() {
+        final JButton createButton = new JButton("New ");
         createButton.setPreferredSize(new Dimension(100, 40));
+
+        final JButton selectButton = new JButton("Open...");
         selectButton.setPreferredSize(new Dimension(100, 40));
 
         final ButtonsPanel buttonsPanel = new ButtonsPanel(createButton, selectButton);
 
         this.setLayout(new GridBagLayout());
         this.add(buttonsPanel);
-    }
 
-    public DatabaseOptionsPanel(
-        final ActionListener onCreateButton,
-        final ActionListener onSelectButton) {
-        this.createButton.addActionListener(onCreateButton);
-        this.selectButton.addActionListener(onSelectButton);
+        createButton.addActionListener(event -> {
+            buttonsPanel.setVisible(false);
+            this.add(new NewDBPanel());
+        });
     }
 
     private static class ButtonsPanel extends JPanel {

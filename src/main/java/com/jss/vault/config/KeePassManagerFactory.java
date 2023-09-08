@@ -1,6 +1,7 @@
 package com.jss.vault.config;
 
 import com.jss.vault.domain.Credential;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
@@ -36,7 +37,7 @@ public class KeePassManagerFactory {
         return new KeePassManager(database, kdbxCreds, file);
     }
 
-    private static SimpleDatabase createDatabase(final OutputStream stream, final KdbxCreds credential) throws IOException {
+    public static SimpleDatabase createDatabase(final OutputStream stream, final KdbxCreds credential) throws IOException {
         final SimpleDatabase database = new SimpleDatabase();
         database.save(credential, stream);
         stream.close();
@@ -51,6 +52,8 @@ public class KeePassManagerFactory {
     }
 
     public static class KeePassManager {
+
+        @Getter
         private final SimpleDatabase database;
         private final KdbxCreds credentials;
         private final File file;
@@ -64,16 +67,7 @@ public class KeePassManagerFactory {
             this.file = file;
         }
 
-        public void update(final Credential credential) throws IOException {
-            final SimpleGroup group = database.getRootGroup();
-            final SimpleEntry entry = database.newEntry();
-
-            entry.setTitle(credential.title());
-            entry.setUsername(credential.username());
-            entry.setPassword(credential.password());
-            entry.setUrl(credential.url());
-            entry.setNotes(credential.notes());
-            group.addEntry(entry);
+        public void update() throws IOException {
             database.save(credentials, new FileOutputStream(file));
         }
     }

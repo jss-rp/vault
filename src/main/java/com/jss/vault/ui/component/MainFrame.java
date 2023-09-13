@@ -17,7 +17,6 @@ public class MainFrame {
     }
 
     public static void setPanel(final JPanel panel) {
-        ;
         FRAME.setContentPane(panel);
         FRAME.repaint();
         FRAME.revalidate();

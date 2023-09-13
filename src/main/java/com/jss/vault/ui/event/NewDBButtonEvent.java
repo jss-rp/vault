@@ -4,6 +4,7 @@ import com.jss.vault.config.KeePassManagerFactory;
 import com.jss.vault.repository.impl.CredentialRepositoryImpl;
 import com.jss.vault.ui.component.CredentialsMenuPanel;
 import com.jss.vault.ui.component.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -12,10 +13,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+@Slf4j
 public class NewDBButtonEvent implements ActionListener {
     private final Component parent;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
+    private final JFileChooser fileChooser = new JFileChooser();
 
     public NewDBButtonEvent(
         final Component parent,
@@ -28,7 +31,6 @@ public class NewDBButtonEvent implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
@@ -43,12 +45,18 @@ public class NewDBButtonEvent implements ActionListener {
             final String extension = extensionFilter.getExtensions()[0];
             final File file = new File("%s.%s".formatted(fileChooser.getSelectedFile().getAbsolutePath(), extension));
 
-            try {
-                final KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, credential);
+            if (file.exists()) {
+                fileChooser.cancelSelection();
+                JOptionPane.showMessageDialog(parent, "This database exists already");
+                this.actionPerformed(event);
+            } else {
+                try {
+                    final KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, credential);
 
-                MainFrame.setPanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                    MainFrame.setPanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

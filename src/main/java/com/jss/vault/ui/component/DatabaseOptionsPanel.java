@@ -1,9 +1,13 @@
 package com.jss.vault.ui.component;
 
+import com.jss.vault.ui.event.LoadButtonEvent;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+@Slf4j
 public class DatabaseOptionsPanel extends JPanel {
 
     public DatabaseOptionsPanel(final ActionListener onNewButton) {
@@ -19,6 +23,7 @@ public class DatabaseOptionsPanel extends JPanel {
         this.add(buttonsPanel);
 
         newButton.addActionListener(onNewButton);
+        selectButton.addActionListener(new LoadButtonEvent(this));
     }
 
     private static class ButtonsPanel extends JPanel {

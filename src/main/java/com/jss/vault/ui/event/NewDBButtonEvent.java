@@ -3,6 +3,7 @@ package com.jss.vault.ui.event;
 import com.jss.vault.config.KeePassManagerFactory;
 import com.jss.vault.repository.impl.CredentialRepositoryImpl;
 import com.jss.vault.ui.component.CredentialsMenuPanel;
+import com.jss.vault.ui.component.MainFrame;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,8 +45,8 @@ public class NewDBButtonEvent implements ActionListener {
 
             try {
                 final KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, credential);
-                this.parent.setVisible(false);
-                this.parent.getParent().add(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
+
+                MainFrame.setPanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

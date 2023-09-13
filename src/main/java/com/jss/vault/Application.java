@@ -1,6 +1,8 @@
 package com.jss.vault;
 
 import com.jss.vault.ui.component.DatabaseOptionsPanel;
+import com.jss.vault.ui.component.MainFrame;
+import com.jss.vault.ui.component.NewDBPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,14 +10,17 @@ import java.awt.*;
 public class Application {
 
     public static void main(String[] args) {
-        final DatabaseOptionsPanel databaseOptionsPanel = new DatabaseOptionsPanel();
+        final JPanel root = new JPanel();
+        final DatabaseOptionsPanel databaseOptionsPanel = new DatabaseOptionsPanel(e -> {
+            root.removeAll();
+            root.setLayout(new GridBagLayout());
+            root.add(new NewDBPanel());
+            root.repaint();
+            root.revalidate();
+        });
 
-        final JFrame frame = new JFrame("Credentials Vault");
-
-        frame.setContentPane(databaseOptionsPanel);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(640, 480);
-        frame.setLocation(new Point(0, 0));
-        frame.setVisible(true);
+        root.setLayout(new BorderLayout());
+        root.add(databaseOptionsPanel, BorderLayout.CENTER);
+        MainFrame.start(root);
     }
 }

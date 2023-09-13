@@ -10,6 +10,7 @@ import org.linguafranca.pwdb.kdbx.simple.SimpleGroup;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 public class CredentialRepositoryImpl implements CredentialRepository {
@@ -27,6 +28,7 @@ public class CredentialRepositoryImpl implements CredentialRepository {
             final SimpleGroup group = database.getRootGroup();
             final SimpleEntry entry = database.newEntry();
 
+            entry.setTitle(credential.title());
             entry.setUsername(credential.username());
             entry.setPassword(credential.password());
             group.addEntry(entry);
@@ -54,6 +56,16 @@ public class CredentialRepositoryImpl implements CredentialRepository {
 
     @Override
     public List<Credential> listAll() {
-        return null;
+        final SimpleGroup rootGroup = KEE_PASS_MANAGER.getDatabase().getRootGroup();
+        final Stream<Credential> credentialStream = rootGroup.getEntries().stream().map(entry -> new Credential(
+            entry.getUuid().toString(),
+            entry.getTitle(),
+            entry.getUsername(),
+            entry.getPassword(),
+            entry.getNotes(),
+            entry.getUrl()
+        ));
+
+        return credentialStream.toList();
     }
 }

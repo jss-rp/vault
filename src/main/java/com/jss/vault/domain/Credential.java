@@ -7,4 +7,9 @@ public record Credential(
     String password,
     String notes,
     String url) {
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

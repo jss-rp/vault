@@ -11,20 +11,37 @@ public class CredentialsMenuPanel extends JPanel {
     public CredentialsMenuPanel(final CredentialRepository repository) {
         final DefaultListModel<Credential> listModel = new DefaultListModel<>();
         final JList<Credential> list = new JList<>(listModel);
-        final JScrollPane scrollPane = new JScrollPane(list);
+        var scrollPane = new JScrollPane(list);
+        var newCredentialPanel = new NewCredentialPanel(listModel, repository);
 
         repository.listAll().forEach(listModel::addElement);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
-        this.add(new NewCredentialPanel(listModel, repository), BorderLayout.EAST);
+        this.add(newCredentialPanel, BorderLayout.EAST);
+
+        list.addListSelectionListener(selection -> {
+            final Credential selectedCredential = list.getSelectedValue();
+            newCredentialPanel.setTitle(selectedCredential.title());
+            newCredentialPanel.setUsername(selectedCredential.username());
+            newCredentialPanel.setPassword(selectedCredential.password());
+            newCredentialPanel.setUrl(selectedCredential.url());
+            newCredentialPanel.setNotes(selectedCredential.notes());
+        });
     }
 
     private static class NewCredentialPanel extends JPanel {
+        private final JTextField titleField = new JTextField(22);
+        private final JTextField usernameField = new JTextField(10);
+        private final JPasswordField passwordField = new JPasswordField(10);
+        private final JTextField urlField = new JTextField(22);
+        private final JTextArea noteField = new JTextArea(5, 22);
+
+
         public NewCredentialPanel(final DefaultListModel<Credential> list, final CredentialRepository repository) {
             var titleLabelPanel = new JPanel();
-            var titleField = new JTextField(22);
 
             titleLabelPanel.setLayout(new BoxLayout(titleLabelPanel, BoxLayout.LINE_AXIS));
             titleLabelPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -33,7 +50,6 @@ public class CredentialsMenuPanel extends JPanel {
             titleLabelPanel.add(titleField);
 
             var usernameLabelPanel = new JPanel();
-            var usernameField = new JTextField(10);
 
             usernameLabelPanel.setLayout(new BoxLayout(usernameLabelPanel, BoxLayout.LINE_AXIS));
             usernameLabelPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -42,7 +58,6 @@ public class CredentialsMenuPanel extends JPanel {
             usernameLabelPanel.add(usernameField);
 
             var passwordLabelPanel = new JPanel();
-            var passwordField = new JPasswordField(10);
 
             passwordLabelPanel.setLayout(new BoxLayout(passwordLabelPanel, BoxLayout.LINE_AXIS));
             passwordLabelPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -51,7 +66,7 @@ public class CredentialsMenuPanel extends JPanel {
             passwordLabelPanel.add(passwordField);
 
             var urlPanel = new JPanel();
-            var urlField = new JTextField(22);
+
 
             urlPanel.setLayout(new BoxLayout(urlPanel, BoxLayout.LINE_AXIS));
             urlPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -60,7 +75,6 @@ public class CredentialsMenuPanel extends JPanel {
             urlPanel.add(urlField);
 
             var notesPanel = new JPanel();
-            var noteField = new JTextArea(5, 22);
             JScrollPane scrollPane = new JScrollPane(noteField);
 
             notesPanel.setLayout(new BoxLayout(notesPanel, BoxLayout.LINE_AXIS));
@@ -122,6 +136,26 @@ public class CredentialsMenuPanel extends JPanel {
             constraints.gridwidth = 2;
 
             this.add(newCredentialButton, constraints);
+        }
+
+        public void setTitle(final String title) {
+            this.titleField.setText(title);
+        }
+
+        public void setUsername(final String username) {
+            this.usernameField.setText(username);
+        }
+
+        public void setPassword(final String password) {
+            this.passwordField.setText(password);
+        }
+
+        public void setUrl(final String url) {
+            this.urlField.setText(url);
+        }
+
+        public void setNotes(final String notes) {
+            this.noteField.setText(notes);
         }
     }
 }

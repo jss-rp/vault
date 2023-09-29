@@ -31,6 +31,8 @@ public class CredentialRepositoryImpl implements CredentialRepository {
             entry.setTitle(credential.title());
             entry.setUsername(credential.username());
             entry.setPassword(credential.password());
+            entry.setUrl(credential.url());
+            entry.setNotes(credential.notes());
             group.addEntry(entry);
             KEE_PASS_MANAGER.update();
 

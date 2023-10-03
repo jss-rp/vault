@@ -2,9 +2,12 @@ package com.jss.vault.ui.component;
 
 import com.jss.vault.domain.Credential;
 import com.jss.vault.repository.CredentialRepository;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 public class CredentialsMenuPanel extends JPanel {
 
@@ -31,7 +34,7 @@ public class CredentialsMenuPanel extends JPanel {
 
     private static class FormCredentialPanel extends JPanel {
         private Credential credential;
-        private final String emptyUuid = "00000000-0000-0000-0000-000000000000";
+        private final String emptyUuid = "";
         public final JLabel idLabel = new JLabel(emptyUuid);
         private final JTextField titleField = new JTextField(22);
         private final JTextField usernameField = new JTextField(10);
@@ -97,15 +100,23 @@ public class CredentialsMenuPanel extends JPanel {
             this.setLayout(layout);
 
             saveCredentialButton.addActionListener(event -> {
-                final String title = titleField.getText();
-                final String username = usernameField.getText();
-                final String password = new String(passwordField.getPassword());
-                final String url = urlField.getText();
-                final String notes = noteField.getText();
-                final Credential credential = new Credential(null, title, username, password, notes, url);
+                final Credential credential = getCredential();
                 this.credential = repository.save(credential);
+
                 this.idLabel.setText(this.credential.id());
-                list.addElement(this.credential);
+
+                final AtomicBoolean wasListUpdated = new AtomicBoolean(false);
+
+                IntStream.range(0, list.getSize()).forEach(i -> {
+                    final Credential item = list.get(i);
+
+                    if (item.id().equalsIgnoreCase(credential.id())) {
+                        list.setElementAt(this.credential, i);
+                        wasListUpdated.set(true);
+                    }
+                });
+
+                if (!wasListUpdated.get()) list.addElement(this.credential);
             });
 
             var clearFormButton = new JButton("Clear");
@@ -116,6 +127,7 @@ public class CredentialsMenuPanel extends JPanel {
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.gridwidth = 2;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
 
             this.add(idLabelPanel, constraints);
 
@@ -158,6 +170,20 @@ public class CredentialsMenuPanel extends JPanel {
             constraints.gridy = 5;
 
             this.add(clearFormButton, constraints);
+        }
+
+        @NotNull
+        private Credential getCredential() {
+            String id = null;
+
+            if (!idLabel.getText().equals(emptyUuid)) id = idLabel.getText();
+
+            final String title = titleField.getText();
+            final String username = usernameField.getText();
+            final String password = new String(passwordField.getPassword());
+            final String url = urlField.getText();
+            final String notes = noteField.getText();
+            return new Credential(id, title, username, password, notes, url);
         }
 
 

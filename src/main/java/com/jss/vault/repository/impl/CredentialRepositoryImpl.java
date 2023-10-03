@@ -10,6 +10,7 @@ import org.linguafranca.pwdb.kdbx.simple.SimpleGroup;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -26,18 +27,32 @@ public class CredentialRepositoryImpl implements CredentialRepository {
         try {
             final SimpleDatabase database = KEE_PASS_MANAGER.getDatabase();
             final SimpleGroup group = database.getRootGroup();
-            final SimpleEntry entry = database.newEntry();
+            final AtomicReference<SimpleEntry> entry = new AtomicReference<>(database.newEntry());
 
-            entry.setTitle(credential.title());
-            entry.setUsername(credential.username());
-            entry.setPassword(credential.password());
-            entry.setUrl(credential.url());
-            entry.setNotes(credential.notes());
-            group.addEntry(entry);
+            group.getEntries().stream()
+                .filter(i -> i.getUuid().toString().equalsIgnoreCase(credential.id()))
+                .findFirst()
+                .ifPresentOrElse(result -> {
+                    result.setTitle(credential.title());
+                    result.setUsername(credential.username());
+                    result.setPassword(credential.password());
+                    result.setUrl(credential.url());
+                    result.setNotes(credential.notes());
+                    entry.set(result);
+                }, () -> {
+                    entry.get().setTitle(credential.title());
+                    entry.get().setUsername(credential.username());
+                    entry.get().setPassword(credential.password());
+                    entry.get().setUrl(credential.url());
+                    entry.get().setNotes(credential.notes());
+                    group.addEntry(entry.get());
+                });
+
+
             KEE_PASS_MANAGER.update();
 
             return new Credential(
-                entry.getUuid().toString(),
+                entry.get().getUuid().toString(),
                 credential.title(),
                 credential.username(),
                 credential.password(),

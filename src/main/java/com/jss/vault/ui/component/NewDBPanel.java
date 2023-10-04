@@ -8,40 +8,41 @@ import java.awt.*;
 public class NewDBPanel extends JPanel {
 
     public NewDBPanel() {
-        var usernameLabel = new JLabel("Username: ");
-        var passwordLabel = new JLabel("Password: ");
+        var usernameLabelPanel = new JPanel();
         var usernameField = new JTextField(12);
+
+        usernameLabelPanel.setLayout(new BoxLayout(usernameLabelPanel, BoxLayout.LINE_AXIS));
+        usernameLabelPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("Username"),
+            BorderFactory.createEmptyBorder(3, 5, 3, 5)));
+        usernameLabelPanel.add(usernameField);
+
+        var passwordLabelPanel = new JPanel();
         var passwordField = new JPasswordField(12);
+
+        passwordLabelPanel.setLayout(new BoxLayout(passwordLabelPanel, BoxLayout.LINE_AXIS));
+        passwordLabelPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("Password"),
+            BorderFactory.createEmptyBorder(3, 5, 3, 5)));
+        passwordLabelPanel.add(passwordField);
+
         var constraints = new GridBagConstraints();
         var createDbButton = new JButton("Create");
-        this.setSize(new Dimension(30, 400));
         this.setLayout(new GridBagLayout());
-        this.setBackground(Color.CYAN);
-        constraints.weightx = 0.1;
+
         constraints.gridx = 0;
         constraints.gridy = 0;
-        this.add(usernameLabel, constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        this.add(usernameLabelPanel, constraints);
 
-        constraints.weightx = 0.3;
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        this.add(usernameField, constraints);
-
-
-        constraints.weightx = 0.1;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        this.add(passwordLabel, constraints);
+        this.add(passwordLabelPanel, constraints);
 
-        constraints.weightx = 20;
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        this.add(passwordField, constraints);
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         constraints.gridwidth = 2;
-        constraints.weightx = 0.3;
         constraints.insets = new Insets(5,0, 0 ,0);
         constraints.gridx = 0;
         constraints.gridy = 2;

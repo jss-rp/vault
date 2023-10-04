@@ -21,4 +21,8 @@ public class MainFrame {
         FRAME.repaint();
         FRAME.revalidate();
     }
+
+    public static void quit() {
+        FRAME.dispose();
+    }
 }

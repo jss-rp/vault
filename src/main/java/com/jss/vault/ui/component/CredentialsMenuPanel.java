@@ -2,6 +2,7 @@ package com.jss.vault.ui.component;
 
 import com.jss.vault.domain.Credential;
 import com.jss.vault.repository.CredentialRepository;
+import com.jss.vault.ui.component.bar.top.TopMenuBar;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -16,12 +17,13 @@ public class CredentialsMenuPanel extends JPanel {
         final JList<Credential> list = new JList<>(listModel);
         var scrollPane = new JScrollPane(list);
         var formCredentialPanel = new FormCredentialPanel(listModel, repository);
+        var menuBar = new TopMenuBar();
 
         repository.listAll().forEach(listModel::addElement);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-
         this.setLayout(new BorderLayout());
+        this.add(menuBar, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(formCredentialPanel, BorderLayout.EAST);
 
@@ -34,7 +36,7 @@ public class CredentialsMenuPanel extends JPanel {
 
     private static class FormCredentialPanel extends JPanel {
         private Credential credential;
-        private final String emptyUuid = "";
+        private final String emptyUuid = " ";
         public final JLabel idLabel = new JLabel(emptyUuid);
         private final JTextField titleField = new JTextField(22);
         private final JTextField usernameField = new JTextField(10);
@@ -42,7 +44,6 @@ public class CredentialsMenuPanel extends JPanel {
         private final JTextField urlField = new JTextField(22);
         private final JTextArea noteField = new JTextArea(5, 22);
         final JButton saveCredentialButton = new JButton("Save");
-
 
         public FormCredentialPanel(final DefaultListModel<Credential> list, final CredentialRepository repository) {
             var idLabelPanel = new JPanel();

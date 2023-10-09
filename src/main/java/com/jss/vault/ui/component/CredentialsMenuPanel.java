@@ -97,8 +97,7 @@ public class CredentialsMenuPanel extends JPanel {
 
             saveCredentialButton.setSize(new Dimension(50, 10));
 
-            var layout = new GridBagLayout();
-            this.setLayout(layout);
+            this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
             saveCredentialButton.addActionListener(event -> {
                 final Credential credential = getCredential();
@@ -121,7 +120,9 @@ public class CredentialsMenuPanel extends JPanel {
             });
 
             var clearFormButton = new JButton("Clear");
+            var basePanel = new JPanel();
 
+            basePanel.setLayout(new GridBagLayout());
             clearFormButton.addActionListener(event -> clearForm());
 
             var constraints = new GridBagConstraints();
@@ -130,47 +131,48 @@ public class CredentialsMenuPanel extends JPanel {
             constraints.gridwidth = 2;
             constraints.fill = GridBagConstraints.HORIZONTAL;
 
-            this.add(idLabelPanel, constraints);
+            basePanel.add(idLabelPanel, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.gridwidth = 2;
 
-            this.add(titleLabelPanel, constraints);
+            basePanel.add(titleLabelPanel, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 2;
             constraints.gridwidth = 1;
 
-            this.add(usernameLabelPanel, constraints);
+            basePanel.add(usernameLabelPanel, constraints);
 
             constraints.gridx = 1;
             constraints.gridy = 2;
 
-            this.add(passwordLabelPanel, constraints);
+            basePanel.add(passwordLabelPanel, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 3;
             constraints.gridwidth = 2;
 
-            this.add(urlPanel, constraints);
+            basePanel.add(urlPanel, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 4;
             constraints.gridwidth = 2;
 
-            this.add(notesPanel, constraints);
+            basePanel.add(notesPanel, constraints);
 
             constraints.gridx = 1;
             constraints.gridy = 5;
             constraints.gridwidth = 1;
 
-            this.add(saveCredentialButton, constraints);
+            basePanel.add(saveCredentialButton, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 5;
 
-            this.add(clearFormButton, constraints);
+            basePanel.add(clearFormButton, constraints);
+            this.add(basePanel);
         }
 
         @NotNull

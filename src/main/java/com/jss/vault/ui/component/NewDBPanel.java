@@ -1,10 +1,12 @@
 package com.jss.vault.ui.component;
 
 import com.jss.vault.ui.event.NewDBButtonEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Slf4j
 public class NewDBPanel extends JPanel {
 
     public NewDBPanel() {
@@ -26,6 +28,16 @@ public class NewDBPanel extends JPanel {
             BorderFactory.createEmptyBorder(3, 5, 3, 5)));
         passwordLabelPanel.add(passwordField);
 
+        var passwordStrengthBarPanel = new JPanel();
+        var passwordEntropyBar = new JProgressBar();
+
+        passwordStrengthBarPanel.setLayout(new BoxLayout(passwordStrengthBarPanel, BoxLayout.LINE_AXIS));
+        passwordStrengthBarPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("Strength"),
+            BorderFactory.createEmptyBorder(3, 5, 3, 5)));
+        passwordStrengthBarPanel.add(passwordEntropyBar);
+
+
         var constraints = new GridBagConstraints();
         var createDbButton = new JButton("Create");
         this.setLayout(new GridBagLayout());
@@ -39,13 +51,14 @@ public class NewDBPanel extends JPanel {
         constraints.gridy = 1;
         this.add(passwordLabelPanel, constraints);
 
-
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        this.add(passwordStrengthBarPanel, constraints);
 
         constraints.gridwidth = 2;
         constraints.insets = new Insets(5,0, 0 ,0);
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
 
         createDbButton.addActionListener(new NewDBButtonEvent(this.getParent(), usernameField, passwordField));
         this.add(createDbButton, constraints);

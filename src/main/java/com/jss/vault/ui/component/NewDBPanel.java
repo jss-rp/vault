@@ -1,6 +1,7 @@
 package com.jss.vault.ui.component;
 
 import com.jss.vault.ui.event.NewDBButtonEvent;
+import com.jss.vault.util.PasswordStrengthCalculator;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -29,14 +30,19 @@ public class NewDBPanel extends JPanel {
         passwordLabelPanel.add(passwordField);
 
         var passwordStrengthBarPanel = new JPanel();
-        var passwordEntropyBar = new JProgressBar();
+        var passwordStrengthBar = new JProgressBar();
 
+        passwordStrengthBar.setMaximum(100);
         passwordStrengthBarPanel.setLayout(new BoxLayout(passwordStrengthBarPanel, BoxLayout.LINE_AXIS));
         passwordStrengthBarPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Strength"),
             BorderFactory.createEmptyBorder(3, 5, 3, 5)));
-        passwordStrengthBarPanel.add(passwordEntropyBar);
+        passwordStrengthBarPanel.add(passwordStrengthBar);
 
+        passwordField.addCaretListener(e -> {
+            final String password = new String(passwordField.getPassword());
+            passwordStrengthBar.setValue(PasswordStrengthCalculator.calculate(password));
+        });
 
         var constraints = new GridBagConstraints();
         var createDbButton = new JButton("Create");

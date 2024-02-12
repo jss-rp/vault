@@ -3,8 +3,17 @@ package com.jss.vault.util;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The base calculator to know the password strength.
+ * */
 public class PasswordStrengthCalculator {
 
+    /**
+     * Calculates how much strong the password is base on it entropy score. See {@link PasswordEntropyMeasurer}
+     *
+     * @param password the target password.
+     * @return strength of password
+     * */
     public static int calculate(final String password) {
         final Regex[] regexArray = Regex.values();
         final List<Regex> matchedRegexList = Arrays.stream(regexArray)
@@ -27,7 +36,6 @@ public class PasswordStrengthCalculator {
 
         final int entropy = PasswordEntropyMeasurer.measure(password, totalRange);
         final int entropyScore = PasswordEntropyMeasurer.calculateScore(entropy);
-
 
         return (int) (entropyScore + regexScore);
     }

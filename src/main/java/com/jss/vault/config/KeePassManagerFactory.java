@@ -1,12 +1,9 @@
 package com.jss.vault.config;
 
-import com.jss.vault.domain.Credential;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
-import org.linguafranca.pwdb.kdbx.simple.SimpleEntry;
-import org.linguafranca.pwdb.kdbx.simple.SimpleGroup;
 
 import java.io.*;
 
@@ -24,7 +21,7 @@ public class KeePassManagerFactory {
             } else {
                 database = createDatabase(new FileOutputStream(file), new KdbxCreds(credential.getBytes()));
             }
-        } catch (IllegalAccessException e) {
+        } catch (FileNotFoundException e) {
             log.error("Username and/or password are incorrect. Error : ", e) ;
         } catch (EOFException e) {
             log.warn("Corrupted file! Creating another...");

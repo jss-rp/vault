@@ -1,9 +1,9 @@
 package com.jss.vault.ui.event;
 
+import com.jss.vault.Application;
 import com.jss.vault.config.KeePassManagerFactory;
 import com.jss.vault.repository.impl.CredentialRepositoryImpl;
 import com.jss.vault.ui.component.CredentialsMenuPanel;
-import com.jss.vault.ui.component.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -21,9 +21,9 @@ public class NewDBButtonEvent implements ActionListener {
     private final JFileChooser fileChooser = new JFileChooser();
 
     public NewDBButtonEvent(
-        final Component parent,
-        final JTextField usernameField,
-        final JPasswordField passwordField) {
+            final Component parent,
+            final JTextField usernameField,
+            final JPasswordField passwordField) {
         this.parent = parent;
         this.usernameField = usernameField;
         this.passwordField = passwordField;
@@ -53,7 +53,7 @@ public class NewDBButtonEvent implements ActionListener {
                 try {
                     final KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, credential);
 
-                    MainFrame.setPanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
+                    Application.changePanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

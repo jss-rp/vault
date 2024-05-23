@@ -9,9 +9,12 @@ import java.awt.event.ActionListener;
 
 @Slf4j
 public class DatabaseOptionsPanel extends JPanel {
+    public static final String NEW_DB_BUTTON = "new_db_button";
 
     public DatabaseOptionsPanel(final ActionListener onNewButton) {
         final JButton newButton = new JButton("New ");
+
+        newButton.setName(NEW_DB_BUTTON);
         newButton.setPreferredSize(new Dimension(100, 40));
 
         final JButton selectButton = new JButton("Open...");

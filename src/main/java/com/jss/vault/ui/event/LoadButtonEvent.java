@@ -1,7 +1,7 @@
 package com.jss.vault.ui.event;
 
+import com.jss.vault.Application;
 import com.jss.vault.ui.component.LoginPanel;
-import com.jss.vault.ui.component.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class LoadButtonEvent implements ActionListener {
             final File file = new File("%s".formatted(fileChooser.getSelectedFile().getAbsolutePath()));
 
             if (file.exists()) {
-                MainFrame.setPanel(new LoginPanel(file));
+                Application.changePanel(new LoginPanel(file));
             } else {
                 fileChooser.cancelSelection();
                 JOptionPane.showMessageDialog(this.parent, "This database doesn't exists already");

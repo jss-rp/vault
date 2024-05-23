@@ -1,7 +1,7 @@
 package com.jss.vault.ui.component.bar.top;
 
+import com.jss.vault.Application;
 import com.jss.vault.ui.component.DatabaseOptionsPanel;
-import com.jss.vault.ui.component.MainFrame;
 import com.jss.vault.ui.component.NewDBPanel;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ public class FileMenu extends JMenu {
         super("File");
 
         onLoginItemSelected();
-        quitItem.addActionListener(__ -> MainFrame.quit());
+        quitItem.addActionListener(__ -> Application.quit());
 
         this.add(newFileItem);
         this.addSeparator();
@@ -23,11 +23,11 @@ public class FileMenu extends JMenu {
     }
 
     private void onLoginItemSelected() {
-        newFileItem.addActionListener(__ -> MainFrame.setPanel(new DatabaseOptionsPanel(e -> {
+        newFileItem.addActionListener(__ -> Application.changePanel(new DatabaseOptionsPanel(e -> {
             final JPanel root = new JPanel();
             root.setLayout(new GridBagLayout());
             root.add(new NewDBPanel());
-            MainFrame.setPanel(root);
+            Application.changePanel(root);
         })));
     }
 }

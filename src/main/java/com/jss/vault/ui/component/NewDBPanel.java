@@ -9,11 +9,15 @@ import java.awt.*;
 
 @Slf4j
 public class NewDBPanel extends JPanel {
+    public static final String USERNAME_FIELD_NAME = "username_field_name";
+    public static final String PASSWORD_FIELD_NAME = "password_field_name";
+    public static final String NEW_DB_FIELD_NAME = "new_db_field_name";
 
     public NewDBPanel() {
         var usernameLabelPanel = new JPanel();
         var usernameField = new JTextField(12);
 
+        usernameField.setName(USERNAME_FIELD_NAME);
         usernameLabelPanel.setLayout(new BoxLayout(usernameLabelPanel, BoxLayout.LINE_AXIS));
         usernameLabelPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Username"),
@@ -23,6 +27,7 @@ public class NewDBPanel extends JPanel {
         var passwordLabelPanel = new JPanel();
         var passwordField = new JPasswordField(12);
 
+        passwordField.setName(PASSWORD_FIELD_NAME);
         passwordLabelPanel.setLayout(new BoxLayout(passwordLabelPanel, BoxLayout.LINE_AXIS));
         passwordLabelPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Password"),
@@ -46,6 +51,8 @@ public class NewDBPanel extends JPanel {
 
         var constraints = new GridBagConstraints();
         var createDbButton = new JButton("Create");
+
+        createDbButton.setName(NEW_DB_FIELD_NAME);
         this.setLayout(new GridBagLayout());
 
         constraints.gridx = 0;

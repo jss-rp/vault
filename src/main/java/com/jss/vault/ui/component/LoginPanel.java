@@ -1,5 +1,6 @@
 package com.jss.vault.ui.component;
 
+import com.jss.vault.Application;
 import com.jss.vault.config.KeePassManagerFactory;
 import com.jss.vault.repository.impl.CredentialRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class LoginPanel extends JPanel {
                 final String credential = "%s:%s".formatted(username, password);
                 final KeePassManagerFactory.KeePassManager keePassManager = KeePassManagerFactory.create(file, credential);
 
-                MainFrame.setPanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
+                Application.changePanel(new CredentialsMenuPanel(new CredentialRepositoryImpl(keePassManager)));
             } catch (Exception e1) {
                 constraints.gridx = 0;
                 constraints.gridy = 3;

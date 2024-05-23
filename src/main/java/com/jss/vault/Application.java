@@ -7,9 +7,12 @@ import com.jss.vault.ui.component.NewDBPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class Application {
+public class Application implements Runnable {
 
-    public static void main(String[] args) {
+    private static MainFrame MAIN_FRAME;
+
+    @Override
+    public void run() {
         final JPanel root = new JPanel();
         final DatabaseOptionsPanel databaseOptionsPanel = new DatabaseOptionsPanel(e -> {
             root.removeAll();
@@ -21,6 +24,20 @@ public class Application {
 
         root.setLayout(new BorderLayout());
         root.add(databaseOptionsPanel, BorderLayout.CENTER);
-        MainFrame.start(root);
+        MAIN_FRAME = new MainFrame(root);
+    }
+
+    public static void changePanel(final JPanel newPanel) {
+        MAIN_FRAME.setPanel(newPanel);
+    }
+
+    public static void quit() {
+        MAIN_FRAME.dispose();
+    }
+
+    ;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Application());
     }
 }
